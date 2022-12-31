@@ -50,8 +50,11 @@
             <div className="card-body">
               <h2 className="card-title">{props.contents[counter-1].title} {counter}/5</h2>
               <p className="card-text">{props.contents[counter-1].text}</p>
-              {counter < 5 && <Button onClick={handleNext} className="btn btn-primary" text="NEXT"/>}
-              {counter > 1 && <Button onClick={handlePrev} className="btn btn-secondary" text="PREV"/>}
+              <div className="btn-container">
+                {counter < 5 && <Button onClick={handleNext} className="btn btn-primary" text="NEXT"/>}
+                {counter == 5 && <div className="btn"></div>}
+                {counter > 1 && <Button onClick={handlePrev} className="btn btn-secondary" text="PREV"/>}
+              </div>
             </div>
           </div>
         );
@@ -61,5 +64,13 @@
       const root = ReactDOM.createRoot(container);
       root.render(<Carousel contents={contents}/>);
     </script>
+
+    <style>
+      .btn-container {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+      }
+    </style>
     </body></div>
 </html>
