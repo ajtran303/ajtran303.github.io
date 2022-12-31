@@ -35,32 +35,23 @@
         { title: 'Conclusion', text: "While HTML, CSS, and JavaScript are the core technologies of web development, there are many other tools and technologies that are commonly used in the field. These include web development frameworks, databases, server-side languages, and version control systems. However, a strong foundation in HTML, CSS, and JavaScript is essential for any web developer, and is a good starting point for those who are new to the field."}
       ]
 
-      function PrevButton(props) {
-        return <button className="btn btn-secondary" onClick={props.onClick}>PREV</button>
-      }
-
-      function NextButton(props) {
-        return <button className="btn btn-primary" onClick={props.onClick}>NEXT</button>
+      function Button(props) {
+        return <button className={props.className} onClick={props.onClick}>{props.text}</button>
       }
 
       function Carousel(props) {
         const [counter, setCounter] = React.useState(1);
 
-        function handlePrev() {
-          setCounter(counter - 1)
-        }
-
-        function handleNext() {
-          setCounter(counter + 1)
-        }
+        const handlePrev = () => setCounter(counter - 1);
+        const handleNext = () => setCounter(counter + 1);
 
         return (
           <div className="card">
             <div className="card-body">
               <h2 className="card-title">{props.contents[counter-1].title} {counter}/5</h2>
               <p className="card-text">{props.contents[counter-1].text}</p>
-              {counter < 5 && <NextButton onClick={handleNext}/>}
-              {counter > 1 && <PrevButton onClick={handlePrev}/>}
+              {counter < 5 && <Button onClick={handleNext} className="btn btn-primary" text="NEXT"/>}
+              {counter > 1 && <Button onClick={handlePrev} className="btn btn-secondary" text="PREV"/>}
             </div>
           </div>
         );
