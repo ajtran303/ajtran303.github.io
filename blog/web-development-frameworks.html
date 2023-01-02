@@ -67,32 +67,26 @@
           { title: 'Angular', url: "https://angular.io/", text: "This is a JavaScript-based web development framework that's designed for building single-page applications (SPAs). Angular is particularly well-suited for building complex, interactive web applications that need to handle a lot of data, such as real-time analytics dashboards and social media platforms. It comes with a range of features that make it easy to build modern web applications, including a powerful templating system and support for dependency injection."}
         ]
 
-        function PrevButton(props) {
-          return <button className="btn btn-secondary" onClick={props.onClick}>PREV</button>
-        }
-
-        function NextButton(props) {
-          return <button className="btn btn-primary" onClick={props.onClick}>NEXT</button>
+        function Button(props) {
+          return <button type="button" className={props.className} onClick={props.onClick}>{props.text}</button>
         }
 
         function Carousel(props) {
           const [counter, setCounter] = React.useState(1);
 
-          function handlePrev() {
-            setCounter(counter - 1)
-          }
-
-          function handleNext() {
-            setCounter(counter + 1)
-          }
+          const handlePrev = () => setCounter(counter - 1);
+          const handleNext = () => setCounter(counter + 1);
 
           return (
             <div className="card">
               <div className="card-body">
                 <h2 className="card-title"><a href={props.contents[counter-1].url} target="_blank">{props.contents[counter-1].title}</a> {counter}/5</h2>
                 <p className="card-text">{props.contents[counter-1].text}</p>
-                {counter < 5 && <NextButton onClick={handleNext}/>}
-                {counter > 1 && <PrevButton onClick={handlePrev}/>}
+                <div className="btn-container">
+                  {counter < 5 && <Button onClick={handleNext} className="btn btn-primary" text="NEXT"/>}
+                  {counter == 5 && <div className="btn"></div>}
+                  {counter > 1 && <Button onClick={handlePrev} className="btn btn-secondary" text="PREV"/>}
+                </div>
               </div>
             </div>
           );
@@ -102,6 +96,15 @@
         const root = ReactDOM.createRoot(container);
         root.render(<Carousel contents={contents}/>);
       </script>
+
+      <style>
+        .btn-container {
+          display: flex;
+          flex-direction: row-reverse;
+          justify-content: space-between;
+        }
+      </style>
+
     </body>
   </div>
 </html>
