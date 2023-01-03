@@ -59,42 +59,68 @@
       </footer>
 
       <script type="text/babel">
-        const contents = [
-          { title: 'Ruby on Rails', url: "https://rubyonrails.org/", text: "This is a full-stack web development framework written in the Ruby programming language. It's known for its convention-over-configuration approach, which means that developers don't have to spend as much time configuring the framework and can instead focus on building out the core functionality of their application. Rails is particularly popular for building web applications that need to handle a lot of data, such as social networking sites and e-commerce platforms." },
-          { title: 'Django', url: "https://www.djangoproject.com/", text: "This is a high-level Python web development framework that's known for its rapid development and clean, pragmatic design. Django is often used for building complex, data-driven web applications, such as news sites and content management systems. It comes with a wide range of built-in features, including an ORM (Object-Relational Mapper) for interacting with databases, and a powerful template system for building user interfaces."},
-          { title: 'Laravel', url: "https://laravel.com/", text: "This is a PHP web development framework that's known for its elegant syntax and extensive documentation. Laravel is particularly popular for building custom business applications, such as CRMs and project management tools. It comes with a range of features that make it easy to build robust web applications, including routing, middleware, and a powerful ORM."},
-          { title: 'ASP.NET', url: "https://dotnet.microsoft.com/en-us/apps/aspnet/", text: "This is a web development framework developed by Microsoft that's written in C# and is designed to be used with the .NET framework. ASP.NET is often used for building enterprise-level web applications, such as intranet portals and customer-facing websites. It comes with a range of features that make it easy to build scalable, reliable web applications, including a powerful security model and support for asynchronous programming."},
-          { title: 'Angular', url: "https://angular.io/", text: "This is a JavaScript-based web development framework that's designed for building single-page applications (SPAs). Angular is particularly well-suited for building complex, interactive web applications that need to handle a lot of data, such as real-time analytics dashboards and social media platforms. It comes with a range of features that make it easy to build modern web applications, including a powerful templating system and support for dependency injection."}
-        ]
 
         function Button(props) {
           return <button type="button" className={props.className} onClick={props.onClick}>{props.text}</button>
         }
 
-        function Carousel(props) {
-          const [counter, setCounter] = React.useState(1);
+        function Card(props) {
+          return (
+            <div className="card-body">
+              <h2><a href={props.url} target="_blank">{props.title}</a></h2>
+              <p>{props.text}</p>
+            </div>
+          )
+        }
+
+        function Cards() {
+          const [contents, setContents] = React.useState([]);
+          const [counter, setCounter] = React.useState(0);
 
           const handlePrev = () => setCounter(counter - 1);
           const handleNext = () => setCounter(counter + 1);
 
+          const url = "https://gist.githubusercontent.com/ajtran303/46c991d6f872de8fe7536c93cdc49375/raw/052b1a959afa4865bbf1b7d64bc615b25a4240d7/web-dev-frameworks.json"
+
+          function fetchContents() {
+            fetch(url)
+              .then((result) => result.json())
+              .then((json) => setContents(json))
+              .catch((error) => console.error(error))
+          }
+
+          // const fetchContents = async () => {
+          //   try {
+          //     const response = await fetch(url);
+          //     const data = await response.json();
+          //     setContents(data)
+          //   }
+          //   catch (error) {
+          //     console.error(error)
+          //   }
+          // }
+
+          React.useEffect(() => {
+            fetchContents()
+          }, [])
+
+          const cards = contents.map((content, index) => <Card key={index} title={content.title} url={content.url} text={content.text} />)
+
           return (
             <div className="card">
-              <div className="card-body">
-                <h2 className="card-title"><a href={props.contents[counter-1].url} target="_blank">{props.contents[counter-1].title}</a> {counter}/5</h2>
-                <p className="card-text">{props.contents[counter-1].text}</p>
-                <div className="btn-container">
-                  {counter < 5 && <Button onClick={handleNext} className="btn btn-primary" text="NEXT"/>}
-                  {counter == 5 && <div className="btn"></div>}
-                  {counter > 1 && <Button onClick={handlePrev} className="btn btn-secondary" text="PREV"/>}
-                </div>
+              {cards[counter]}
+              <div className="btn-container card-body">
+                {counter < 4 && <Button onClick={handleNext} className="btn btn-primary" text="NEXT"/>}
+                {counter == 4 && <div className="btn"></div>}
+                {counter > 0 && <Button onClick={handlePrev} className="btn btn-secondary" text="PREV"/>}
               </div>
             </div>
-          );
+          )
         }
 
         const container = document.getElementById('root');
         const root = ReactDOM.createRoot(container);
-        root.render(<Carousel contents={contents}/>);
+        root.render(<Cards />);
       </script>
 
       <style>
@@ -104,7 +130,6 @@
           justify-content: space-between;
         }
       </style>
-
     </body>
   </div>
 </html>
